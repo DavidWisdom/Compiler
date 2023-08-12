@@ -67,7 +67,7 @@
 
 
 /* First part of user prologue.  */
-#line 10 "yacc.y"
+#line 9 "yacc.y"
 
 extern "C" {
     extern int yylex();
@@ -111,15 +111,14 @@ extern int yydebug;
 /* "%code requires" blocks.  */
 #line 1 "yacc.y"
 
-#include "syntax.h"
-#include <iostream>
-#include <string>
-#include <cassert>
-#include <cstring>
-#include <memory>
-Front::CompUnit* root = nullptr;
+    #include "syntax.h"
+    #include <iostream>
+    #include <string>
+    #include <cassert>
+    #include <cstring>
+    #include <memory>
 
-#line 123 "y.tab.c"
+#line 122 "y.tab.c"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -145,7 +144,7 @@ Front::CompUnit* root = nullptr;
     LPAREN = 270,                  /* LPAREN  */
     RPAREN = 271,                  /* RPAREN  */
     ASSIGNN = 272,                 /* ASSIGNN  */
-    VOID = 273,                    /* VOID  */
+    VOIDD = 273,                   /* VOIDD  */
     IF = 274,                      /* IF  */
     ELSE = 275,                    /* ELSE  */
     WHILE = 276,                   /* WHILE  */
@@ -190,7 +189,7 @@ Front::CompUnit* root = nullptr;
 #define LPAREN 270
 #define RPAREN 271
 #define ASSIGNN 272
-#define VOID 273
+#define VOIDD 273
 #define IF 274
 #define ELSE 275
 #define WHILE 276
@@ -217,16 +216,16 @@ Front::CompUnit* root = nullptr;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 16 "yacc.y"
+#line 15 "yacc.y"
 
     Front::CompUnit* compUnit;
     Front::Stmt* stmt;
-    char* data;
-    char* name;
+    std::string* data;
+    std::string* name;
     int type;
     int op;
 
-#line 230 "y.tab.c"
+#line 229 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -264,7 +263,7 @@ enum yysymbol_kind_t
   YYSYMBOL_LPAREN = 15,                    /* LPAREN  */
   YYSYMBOL_RPAREN = 16,                    /* RPAREN  */
   YYSYMBOL_ASSIGNN = 17,                   /* ASSIGNN  */
-  YYSYMBOL_VOID = 18,                      /* VOID  */
+  YYSYMBOL_VOIDD = 18,                     /* VOIDD  */
   YYSYMBOL_IF = 19,                        /* IF  */
   YYSYMBOL_ELSE = 20,                      /* ELSE  */
   YYSYMBOL_WHILE = 21,                     /* WHILE  */
@@ -722,17 +721,17 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    58,    58,    62,    67,    72,    76,    82,    83,    86,
+       0,    57,    57,    62,    67,    72,    76,    82,    83,    86,
       87,    90,    91,    94,    95,    97,    98,   103,   107,   108,
-     110,   111,   112,   113,   117,   118,   122,   123,   124,   125,
-     128,   132,   133,   135,   136,   137,   138,   141,   142,   143,
-     144,   148,   149,   152,   153,   156,   157,   159,   163,   169,
-     170,   177,   182,   183,   184,   185,   186,   187,   188,   189,
-     191,   196,   203,   209,   211,   213,   217,   222,   225,   228,
-     229,   234,   235,   236,   239,   240,   244,   245,   246,   248,
-     249,   252,   253,   254,   257,   258,   260,   261,   263,   264,
-     265,   268,   269,   271,   272,   275,   276,   278,   279,   280,
-     281,   284,   285,   286,   289,   290,   293,   294,   297
+     110,   111,   112,   113,   117,   121,   125,   126,   127,   128,
+     131,   135,   136,   138,   139,   140,   141,   144,   147,   153,
+     157,   166,   167,   170,   171,   174,   175,   177,   181,   187,
+     188,   195,   200,   201,   202,   203,   204,   205,   206,   207,
+     209,   214,   221,   227,   229,   231,   235,   240,   243,   246,
+     247,   252,   253,   254,   257,   258,   262,   263,   264,   266,
+     267,   270,   271,   272,   275,   276,   278,   279,   281,   282,
+     283,   286,   287,   289,   290,   293,   294,   296,   297,   298,
+     299,   302,   303,   304,   307,   308,   311,   312,   315
 };
 #endif
 
@@ -750,7 +749,7 @@ static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "IDENT", "INT_CONST",
   "FLOAT_CONST", "CONST", "INTT", "FLOATT", "COMMA", "SEMICOLON", "LBRACE",
-  "RBRACE", "LBRACKET", "RBRACKET", "LPAREN", "RPAREN", "ASSIGNN", "VOID",
+  "RBRACE", "LBRACKET", "RBRACKET", "LPAREN", "RPAREN", "ASSIGNN", "VOIDD",
   "IF", "ELSE", "WHILE", "BREAK", "CONTINUE", "RETURN", "ADDD", "SUBB",
   "MULL", "DIVV", "MODD", "GTT", "GEQQ", "LTT", "LEQQ", "EQQ", "NEQQ",
   "ANDD", "ORR", "NOTT", "LOWER_THAN_ELSE", "$accept", "Program",
@@ -1434,9 +1433,10 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* Program: CompUnit  */
-#line 58 "yacc.y"
+#line 57 "yacc.y"
                   {
-    root = (yyvsp[0].compUnit);
+    (yyvsp[0].compUnit)->analyze();
+    (yyvsp[0].compUnit)->astGen();
 }
 #line 1442 "y.tab.c"
     break;
@@ -1583,547 +1583,565 @@ yyreduce:
 
   case 24: /* VarDecl: BType VarDef  */
 #line 117 "yacc.y"
-                      {}
-#line 1588 "y.tab.c"
+                      { 
+    (yyvsp[0].stmt)->setType((yyvsp[-1].type));
+    (yyval.stmt) = (yyvsp[0].stmt);
+}
+#line 1591 "y.tab.c"
     break;
 
   case 25: /* VarDecl: VarDecl COMMA VarDef  */
-#line 118 "yacc.y"
-                           {}
-#line 1594 "y.tab.c"
+#line 121 "yacc.y"
+                           { std::shared_ptr<Front::Stmt> var((yyvsp[0].stmt)); (yyval.stmt)->insert(var); }
+#line 1597 "y.tab.c"
     break;
 
   case 26: /* VarDef: IDENT  */
-#line 122 "yacc.y"
-              { std::string name = std::string((yyvsp[0].name)); (yyval.stmt) = new Front::VarStmt(name); }
-#line 1600 "y.tab.c"
+#line 125 "yacc.y"
+              { (yyval.stmt) = new Front::VarStmt(*(yyvsp[0].name)); }
+#line 1603 "y.tab.c"
     break;
 
   case 27: /* VarDef: IDENT ArrayOpt  */
-#line 123 "yacc.y"
+#line 126 "yacc.y"
                      {}
-#line 1606 "y.tab.c"
+#line 1609 "y.tab.c"
     break;
 
   case 28: /* VarDef: IDENT ASSIGNN InitVal  */
-#line 124 "yacc.y"
-                            { std::string name = std::string((yyvsp[-2].name)); auto var = new Front::VarStmt(name); std::shared_ptr<Front::Stmt> val((yyvsp[0].stmt)); var->push_back(val); (yyval.stmt) = var; }
-#line 1612 "y.tab.c"
+#line 127 "yacc.y"
+                            { auto var = new Front::VarStmt(*(yyvsp[-2].name)); std::shared_ptr<Front::Stmt> val((yyvsp[0].stmt)); var->push_back(val); (yyval.stmt) = var; }
+#line 1615 "y.tab.c"
     break;
 
   case 29: /* VarDef: IDENT ArrayOpt InitArray  */
-#line 125 "yacc.y"
+#line 128 "yacc.y"
                                {}
-#line 1618 "y.tab.c"
+#line 1621 "y.tab.c"
     break;
 
   case 30: /* InitVal: Exp  */
-#line 128 "yacc.y"
+#line 131 "yacc.y"
              { (yyval.stmt) = (yyvsp[0].stmt); }
-#line 1624 "y.tab.c"
+#line 1627 "y.tab.c"
     break;
 
   case 31: /* InitArray: LBRACE RBRACE  */
-#line 132 "yacc.y"
+#line 135 "yacc.y"
                          {}
-#line 1630 "y.tab.c"
+#line 1633 "y.tab.c"
     break;
 
   case 32: /* InitArray: LBRACE InitArrayBody RBRACE  */
-#line 133 "yacc.y"
+#line 136 "yacc.y"
                                   {}
-#line 1636 "y.tab.c"
+#line 1639 "y.tab.c"
     break;
 
   case 33: /* InitArrayBody: InitArrayBody COMMA InitArray  */
-#line 135 "yacc.y"
+#line 138 "yacc.y"
                                              {}
-#line 1642 "y.tab.c"
+#line 1645 "y.tab.c"
     break;
 
   case 34: /* InitArrayBody: InitArrayBody COMMA InitVal  */
-#line 136 "yacc.y"
+#line 139 "yacc.y"
                                   {}
-#line 1648 "y.tab.c"
+#line 1651 "y.tab.c"
     break;
 
   case 35: /* InitArrayBody: InitArray  */
-#line 137 "yacc.y"
+#line 140 "yacc.y"
                 {}
-#line 1654 "y.tab.c"
+#line 1657 "y.tab.c"
     break;
 
   case 36: /* InitArrayBody: InitVal  */
-#line 138 "yacc.y"
+#line 141 "yacc.y"
               {}
-#line 1660 "y.tab.c"
+#line 1663 "y.tab.c"
     break;
 
   case 37: /* FuncDef: BType IDENT LPAREN FuncFParams RPAREN Block  */
-#line 141 "yacc.y"
-                                                     {}
-#line 1666 "y.tab.c"
+#line 144 "yacc.y"
+                                                     {
+    int type = (yyvsp[-5].type) | Front::Type::FUNC;
+}
+#line 1671 "y.tab.c"
     break;
 
   case 38: /* FuncDef: BType IDENT LPAREN RPAREN Block  */
-#line 142 "yacc.y"
-                                      {}
-#line 1672 "y.tab.c"
+#line 147 "yacc.y"
+                                      {
+    int type = (yyvsp[-4].type) | Front::Type::FUNC;
+    std::string name(*(yyvsp[-3].name));
+    std::shared_ptr<Front::Stmt> block((yyvsp[0].stmt));
+    (yyval.stmt) = new Front::FuncDefStmt(name, type, block);
+}
+#line 1682 "y.tab.c"
     break;
 
-  case 39: /* FuncDef: VOID IDENT LPAREN FuncFParams RPAREN Block  */
-#line 143 "yacc.y"
-                                                 {}
-#line 1678 "y.tab.c"
+  case 39: /* FuncDef: VOIDD IDENT LPAREN FuncFParams RPAREN Block  */
+#line 153 "yacc.y"
+                                                  {
+    int type = Front::Type::VOID | Front::Type::FUNC;
+
+}
+#line 1691 "y.tab.c"
     break;
 
-  case 40: /* FuncDef: VOID IDENT LPAREN RPAREN Block  */
-#line 144 "yacc.y"
-                                     {}
-#line 1684 "y.tab.c"
-    break;
-
-  case 41: /* FuncFParams: FuncFParam COMMA FuncFParam  */
-#line 148 "yacc.y"
-                                         {}
-#line 1690 "y.tab.c"
-    break;
-
-  case 42: /* FuncFParams: FuncFParam  */
-#line 149 "yacc.y"
-                 {}
-#line 1696 "y.tab.c"
-    break;
-
-  case 43: /* FuncFParam: BType IDENT  */
-#line 152 "yacc.y"
-                        {}
+  case 40: /* FuncDef: VOIDD IDENT LPAREN RPAREN Block  */
+#line 157 "yacc.y"
+                                      {
+    int type = Front::Type::VOID | Front::Type::FUNC;
+    std::string name(*(yyvsp[-3].name));
+    std::shared_ptr<Front::Stmt> block((yyvsp[0].stmt));
+    (yyval.stmt) = new Front::FuncDefStmt(name, type, block);
+}
 #line 1702 "y.tab.c"
     break;
 
-  case 44: /* FuncFParam: BType IDENT ArrayOpt  */
-#line 153 "yacc.y"
-                           {}
+  case 41: /* FuncFParams: FuncFParam COMMA FuncFParam  */
+#line 166 "yacc.y"
+                                         {}
 #line 1708 "y.tab.c"
     break;
 
-  case 45: /* Block: LBRACE BlockItems RBRACE  */
-#line 156 "yacc.y"
-                                { (yyval.stmt) = (yyvsp[-1].stmt); }
+  case 42: /* FuncFParams: FuncFParam  */
+#line 167 "yacc.y"
+                 {}
 #line 1714 "y.tab.c"
     break;
 
-  case 46: /* Block: LBRACE RBRACE  */
-#line 157 "yacc.y"
-                    { (yyval.stmt) = new Front::BlockStmt(); }
+  case 43: /* FuncFParam: BType IDENT  */
+#line 170 "yacc.y"
+                        {}
 #line 1720 "y.tab.c"
     break;
 
+  case 44: /* FuncFParam: BType IDENT ArrayOpt  */
+#line 171 "yacc.y"
+                           {}
+#line 1726 "y.tab.c"
+    break;
+
+  case 45: /* Block: LBRACE BlockItems RBRACE  */
+#line 174 "yacc.y"
+                                { (yyval.stmt) = (yyvsp[-1].stmt); }
+#line 1732 "y.tab.c"
+    break;
+
+  case 46: /* Block: LBRACE RBRACE  */
+#line 175 "yacc.y"
+                    { (yyval.stmt) = new Front::BlockStmt(); }
+#line 1738 "y.tab.c"
+    break;
+
   case 47: /* BlockItems: BlockItem  */
-#line 159 "yacc.y"
+#line 177 "yacc.y"
                       {
     std::shared_ptr<Front::Stmt> stmt((yyvsp[0].stmt));
     (yyval.stmt) = new Front::BlockStmt(stmt);
 }
-#line 1729 "y.tab.c"
+#line 1747 "y.tab.c"
     break;
 
   case 48: /* BlockItems: BlockItems BlockItem  */
-#line 163 "yacc.y"
+#line 181 "yacc.y"
                            {
     std::shared_ptr<Front::Stmt> stmt((yyvsp[0].stmt));
     (yyvsp[-1].stmt)->push_back(stmt); 
     (yyval.stmt) = (yyvsp[-1].stmt);
 }
-#line 1739 "y.tab.c"
+#line 1757 "y.tab.c"
     break;
 
   case 49: /* BlockItem: Decl  */
-#line 169 "yacc.y"
+#line 187 "yacc.y"
                 { (yyval.stmt) = (yyvsp[0].stmt); }
-#line 1745 "y.tab.c"
+#line 1763 "y.tab.c"
     break;
 
   case 50: /* BlockItem: Stmt  */
-#line 170 "yacc.y"
+#line 188 "yacc.y"
            { (yyval.stmt) = (yyvsp[0].stmt); }
-#line 1751 "y.tab.c"
+#line 1769 "y.tab.c"
     break;
 
   case 51: /* Stmt: LVal ASSIGNN Exp SEMICOLON  */
-#line 177 "yacc.y"
+#line 195 "yacc.y"
                                  { 
     std::shared_ptr<Front::Stmt> lval((yyvsp[-3].stmt));
     std::shared_ptr<Front::Stmt> rval((yyvsp[-1].stmt));
     (yyval.stmt) = new Front::AssignStmt(lval, rval);
 }
-#line 1761 "y.tab.c"
-    break;
-
-  case 52: /* Stmt: Exp SEMICOLON  */
-#line 182 "yacc.y"
-                    { (yyval.stmt) = (yyvsp[-1].stmt); }
-#line 1767 "y.tab.c"
-    break;
-
-  case 53: /* Stmt: SEMICOLON  */
-#line 183 "yacc.y"
-                { (yyval.stmt) = nullptr; }
-#line 1773 "y.tab.c"
-    break;
-
-  case 54: /* Stmt: Block  */
-#line 184 "yacc.y"
-            { (yyval.stmt) = (yyvsp[0].stmt); }
 #line 1779 "y.tab.c"
     break;
 
-  case 55: /* Stmt: IfStmt  */
-#line 185 "yacc.y"
-             { (yyval.stmt) = (yyvsp[0].stmt); }
+  case 52: /* Stmt: Exp SEMICOLON  */
+#line 200 "yacc.y"
+                    { (yyval.stmt) = (yyvsp[-1].stmt); }
 #line 1785 "y.tab.c"
     break;
 
-  case 56: /* Stmt: WhileStmt  */
-#line 186 "yacc.y"
-                { (yyval.stmt) = (yyvsp[0].stmt); }
+  case 53: /* Stmt: SEMICOLON  */
+#line 201 "yacc.y"
+                { (yyval.stmt) = nullptr; }
 #line 1791 "y.tab.c"
     break;
 
-  case 57: /* Stmt: BreakStmt  */
-#line 187 "yacc.y"
-                { (yyval.stmt) = (yyvsp[0].stmt); }
+  case 54: /* Stmt: Block  */
+#line 202 "yacc.y"
+            { (yyval.stmt) = (yyvsp[0].stmt); }
 #line 1797 "y.tab.c"
     break;
 
-  case 58: /* Stmt: ContinueStmt  */
-#line 188 "yacc.y"
-                   { (yyval.stmt) = (yyvsp[0].stmt); }
+  case 55: /* Stmt: IfStmt  */
+#line 203 "yacc.y"
+             { (yyval.stmt) = (yyvsp[0].stmt); }
 #line 1803 "y.tab.c"
     break;
 
-  case 59: /* Stmt: ReturnStmt  */
-#line 189 "yacc.y"
-                 { (yyval.stmt) = (yyvsp[0].stmt); }
+  case 56: /* Stmt: WhileStmt  */
+#line 204 "yacc.y"
+                { (yyval.stmt) = (yyvsp[0].stmt); }
 #line 1809 "y.tab.c"
     break;
 
+  case 57: /* Stmt: BreakStmt  */
+#line 205 "yacc.y"
+                { (yyval.stmt) = (yyvsp[0].stmt); }
+#line 1815 "y.tab.c"
+    break;
+
+  case 58: /* Stmt: ContinueStmt  */
+#line 206 "yacc.y"
+                   { (yyval.stmt) = (yyvsp[0].stmt); }
+#line 1821 "y.tab.c"
+    break;
+
+  case 59: /* Stmt: ReturnStmt  */
+#line 207 "yacc.y"
+                 { (yyval.stmt) = (yyvsp[0].stmt); }
+#line 1827 "y.tab.c"
+    break;
+
   case 60: /* IfStmt: IF LPAREN Cond RPAREN Stmt  */
-#line 191 "yacc.y"
+#line 209 "yacc.y"
                                                          {
     std::shared_ptr<Front::Stmt> cond((yyvsp[-2].stmt));
     std::shared_ptr<Front::Stmt> true_block((yyvsp[0].stmt));
     (yyval.stmt) = new Front::IfStmt(cond, true_block);
 }
-#line 1819 "y.tab.c"
+#line 1837 "y.tab.c"
     break;
 
   case 61: /* IfStmt: IF LPAREN Cond RPAREN Stmt ELSE Stmt  */
-#line 196 "yacc.y"
+#line 214 "yacc.y"
                                            {
     std::shared_ptr<Front::Stmt> cond((yyvsp[-4].stmt));
     std::shared_ptr<Front::Stmt> true_block((yyvsp[-2].stmt));
     std::shared_ptr<Front::Stmt> false_block((yyvsp[0].stmt));
     (yyval.stmt) = new Front::IfStmt(cond, true_block, false_block);
 }
-#line 1830 "y.tab.c"
+#line 1848 "y.tab.c"
     break;
 
   case 62: /* WhileStmt: WHILE LPAREN Cond RPAREN Stmt  */
-#line 203 "yacc.y"
+#line 221 "yacc.y"
                                          {
     std::shared_ptr<Front::Stmt> cond((yyvsp[-2].stmt));
     std::shared_ptr<Front::Stmt> true_block((yyvsp[0].stmt));
     (yyval.stmt) = new Front::WhileStmt(cond, true_block);
 }
-#line 1840 "y.tab.c"
+#line 1858 "y.tab.c"
     break;
 
   case 63: /* BreakStmt: BREAK SEMICOLON  */
-#line 209 "yacc.y"
+#line 227 "yacc.y"
                            { (yyval.stmt) = new Front::BreakStmt(); }
-#line 1846 "y.tab.c"
+#line 1864 "y.tab.c"
     break;
 
   case 64: /* ContinueStmt: CONTINUE SEMICOLON  */
-#line 211 "yacc.y"
+#line 229 "yacc.y"
                                  { (yyval.stmt) = new Front::ContinueStmt(); }
-#line 1852 "y.tab.c"
+#line 1870 "y.tab.c"
     break;
 
   case 65: /* ReturnStmt: RETURN Exp SEMICOLON  */
-#line 213 "yacc.y"
+#line 231 "yacc.y"
                                  {
     std::shared_ptr<Front::Stmt> stmt((yyvsp[-1].stmt));
     (yyval.stmt) = new Front::ReturnStmt(stmt);
 }
-#line 1861 "y.tab.c"
+#line 1879 "y.tab.c"
     break;
 
   case 66: /* ReturnStmt: RETURN SEMICOLON  */
-#line 217 "yacc.y"
+#line 235 "yacc.y"
                        {
     (yyval.stmt) = new Front::ReturnStmt();
 }
-#line 1869 "y.tab.c"
-    break;
-
-  case 67: /* Exp: AddExp  */
-#line 222 "yacc.y"
-            { (yyval.stmt) = (yyvsp[0].stmt); }
-#line 1875 "y.tab.c"
-    break;
-
-  case 68: /* Cond: LOrExp  */
-#line 225 "yacc.y"
-             { (yyval.stmt) = (yyvsp[0].stmt); }
-#line 1881 "y.tab.c"
-    break;
-
-  case 69: /* LVal: IDENT  */
-#line 228 "yacc.y"
-            { std::string name((yyvsp[0].name)); (yyval.stmt) = new Front::VarStmt(name); }
 #line 1887 "y.tab.c"
     break;
 
+  case 67: /* Exp: AddExp  */
+#line 240 "yacc.y"
+            { (yyval.stmt) = (yyvsp[0].stmt); }
+#line 1893 "y.tab.c"
+    break;
+
+  case 68: /* Cond: LOrExp  */
+#line 243 "yacc.y"
+             { (yyval.stmt) = (yyvsp[0].stmt); }
+#line 1899 "y.tab.c"
+    break;
+
+  case 69: /* LVal: IDENT  */
+#line 246 "yacc.y"
+            { std::string name(*(yyvsp[0].name)); (yyval.stmt) = new Front::VarStmt(name); }
+#line 1905 "y.tab.c"
+    break;
+
   case 70: /* LVal: LVal LBRACKET Exp RBRACKET  */
-#line 229 "yacc.y"
+#line 247 "yacc.y"
                                  {
 
 }
-#line 1895 "y.tab.c"
-    break;
-
-  case 71: /* PrimaryExp: LPAREN Exp RPAREN  */
-#line 234 "yacc.y"
-                              {}
-#line 1901 "y.tab.c"
-    break;
-
-  case 72: /* PrimaryExp: LVal  */
-#line 235 "yacc.y"
-           {}
-#line 1907 "y.tab.c"
-    break;
-
-  case 73: /* PrimaryExp: Number  */
-#line 236 "yacc.y"
-             {}
 #line 1913 "y.tab.c"
     break;
 
-  case 74: /* Number: INT_CONST  */
-#line 239 "yacc.y"
-                  {}
+  case 71: /* PrimaryExp: LPAREN Exp RPAREN  */
+#line 252 "yacc.y"
+                              {}
 #line 1919 "y.tab.c"
     break;
 
-  case 75: /* Number: FLOAT_CONST  */
-#line 240 "yacc.y"
-                  {}
+  case 72: /* PrimaryExp: LVal  */
+#line 253 "yacc.y"
+           {}
 #line 1925 "y.tab.c"
     break;
 
-  case 76: /* UnaryExp: PrimaryExp  */
-#line 244 "yacc.y"
-                     {}
+  case 73: /* PrimaryExp: Number  */
+#line 254 "yacc.y"
+             {}
 #line 1931 "y.tab.c"
     break;
 
-  case 77: /* UnaryExp: FuncCall  */
-#line 245 "yacc.y"
-               {}
+  case 74: /* Number: INT_CONST  */
+#line 257 "yacc.y"
+                  {}
 #line 1937 "y.tab.c"
     break;
 
-  case 78: /* UnaryExp: UnaryOp UnaryExp  */
-#line 246 "yacc.y"
-                       {}
+  case 75: /* Number: FLOAT_CONST  */
+#line 258 "yacc.y"
+                  {}
 #line 1943 "y.tab.c"
     break;
 
-  case 79: /* FuncCall: IDENT LPAREN FuncRParams RPAREN  */
-#line 248 "yacc.y"
-                                          {}
+  case 76: /* UnaryExp: PrimaryExp  */
+#line 262 "yacc.y"
+                     {}
 #line 1949 "y.tab.c"
     break;
 
-  case 80: /* FuncCall: IDENT LPAREN RPAREN  */
-#line 249 "yacc.y"
-                          {}
+  case 77: /* UnaryExp: FuncCall  */
+#line 263 "yacc.y"
+               {}
 #line 1955 "y.tab.c"
     break;
 
-  case 81: /* UnaryOp: ADDD  */
-#line 252 "yacc.y"
-              { (yyval.op) = Front::Op::ADD; }
+  case 78: /* UnaryExp: UnaryOp UnaryExp  */
+#line 264 "yacc.y"
+                       {}
 #line 1961 "y.tab.c"
     break;
 
-  case 82: /* UnaryOp: SUBB  */
-#line 253 "yacc.y"
-           { (yyval.op) = Front::Op::SUB; }
+  case 79: /* FuncCall: IDENT LPAREN FuncRParams RPAREN  */
+#line 266 "yacc.y"
+                                          {}
 #line 1967 "y.tab.c"
     break;
 
-  case 83: /* UnaryOp: NOTT  */
-#line 254 "yacc.y"
-           {  }
+  case 80: /* FuncCall: IDENT LPAREN RPAREN  */
+#line 267 "yacc.y"
+                          {}
 #line 1973 "y.tab.c"
     break;
 
-  case 84: /* FuncRParams: Exp  */
-#line 257 "yacc.y"
-                 {}
+  case 81: /* UnaryOp: ADDD  */
+#line 270 "yacc.y"
+              { (yyval.op) = Front::Op::ADD; }
 #line 1979 "y.tab.c"
     break;
 
-  case 85: /* FuncRParams: FuncRParams COMMA Exp  */
-#line 258 "yacc.y"
-                            {}
+  case 82: /* UnaryOp: SUBB  */
+#line 271 "yacc.y"
+           { (yyval.op) = Front::Op::SUB; }
 #line 1985 "y.tab.c"
     break;
 
-  case 86: /* MulExp: UnaryExp  */
-#line 260 "yacc.y"
-                 {}
+  case 83: /* UnaryOp: NOTT  */
+#line 272 "yacc.y"
+           {  }
 #line 1991 "y.tab.c"
     break;
 
-  case 87: /* MulExp: MulExp MulOp UnaryExp  */
-#line 261 "yacc.y"
-                            {}
+  case 84: /* FuncRParams: Exp  */
+#line 275 "yacc.y"
+                 {}
 #line 1997 "y.tab.c"
     break;
 
-  case 88: /* MulOp: MULL  */
-#line 263 "yacc.y"
-            { (yyval.op) = Front::Op::MUL; }
+  case 85: /* FuncRParams: FuncRParams COMMA Exp  */
+#line 276 "yacc.y"
+                            {}
 #line 2003 "y.tab.c"
     break;
 
-  case 89: /* MulOp: DIVV  */
-#line 264 "yacc.y"
-           { (yyval.op) = Front::Op::DIV; }
+  case 86: /* MulExp: UnaryExp  */
+#line 278 "yacc.y"
+                 {}
 #line 2009 "y.tab.c"
     break;
 
-  case 90: /* MulOp: MODD  */
-#line 265 "yacc.y"
-           { (yyval.op) = Front::Op::MOD; }
+  case 87: /* MulExp: MulExp MulOp UnaryExp  */
+#line 279 "yacc.y"
+                            {}
 #line 2015 "y.tab.c"
     break;
 
-  case 91: /* AddExp: MulExp  */
-#line 268 "yacc.y"
-               {}
+  case 88: /* MulOp: MULL  */
+#line 281 "yacc.y"
+            { (yyval.op) = Front::Op::MUL; }
 #line 2021 "y.tab.c"
     break;
 
-  case 92: /* AddExp: AddExp AddOp MulExp  */
-#line 269 "yacc.y"
-                          {}
+  case 89: /* MulOp: DIVV  */
+#line 282 "yacc.y"
+           { (yyval.op) = Front::Op::DIV; }
 #line 2027 "y.tab.c"
     break;
 
-  case 93: /* AddOp: ADDD  */
-#line 271 "yacc.y"
-            { (yyval.op) = Front::Op::ADD; }
+  case 90: /* MulOp: MODD  */
+#line 283 "yacc.y"
+           { (yyval.op) = Front::Op::MOD; }
 #line 2033 "y.tab.c"
     break;
 
-  case 94: /* AddOp: SUBB  */
-#line 272 "yacc.y"
-           { (yyval.op) = Front::Op::SUB; }
+  case 91: /* AddExp: MulExp  */
+#line 286 "yacc.y"
+               {}
 #line 2039 "y.tab.c"
     break;
 
-  case 95: /* RelExp: AddExp  */
-#line 275 "yacc.y"
-               {}
+  case 92: /* AddExp: AddExp AddOp MulExp  */
+#line 287 "yacc.y"
+                          {}
 #line 2045 "y.tab.c"
     break;
 
-  case 96: /* RelExp: RelExp RelOp AddExp  */
-#line 276 "yacc.y"
-                          {}
+  case 93: /* AddOp: ADDD  */
+#line 289 "yacc.y"
+            { (yyval.op) = Front::Op::ADD; }
 #line 2051 "y.tab.c"
     break;
 
-  case 97: /* RelOp: GTT  */
-#line 278 "yacc.y"
-           { (yyval.op) = Front::Op::GT; }
+  case 94: /* AddOp: SUBB  */
+#line 290 "yacc.y"
+           { (yyval.op) = Front::Op::SUB; }
 #line 2057 "y.tab.c"
     break;
 
-  case 98: /* RelOp: GEQQ  */
-#line 279 "yacc.y"
-           { (yyval.op) = Front::Op::GEQ; }
+  case 95: /* RelExp: AddExp  */
+#line 293 "yacc.y"
+               {}
 #line 2063 "y.tab.c"
     break;
 
-  case 99: /* RelOp: LTT  */
-#line 280 "yacc.y"
-          {  (yyval.op) = Front::Op::LT; }
+  case 96: /* RelExp: RelExp RelOp AddExp  */
+#line 294 "yacc.y"
+                          {}
 #line 2069 "y.tab.c"
     break;
 
-  case 100: /* RelOp: LEQQ  */
-#line 281 "yacc.y"
-           { (yyval.op) = Front::Op::LEQ; }
+  case 97: /* RelOp: GTT  */
+#line 296 "yacc.y"
+           { (yyval.op) = Front::Op::GT; }
 #line 2075 "y.tab.c"
     break;
 
-  case 101: /* EqExp: RelExp  */
-#line 284 "yacc.y"
-              {}
+  case 98: /* RelOp: GEQQ  */
+#line 297 "yacc.y"
+           { (yyval.op) = Front::Op::GEQ; }
 #line 2081 "y.tab.c"
     break;
 
-  case 102: /* EqExp: EqExp EQQ RelExp  */
-#line 285 "yacc.y"
-                       {}
+  case 99: /* RelOp: LTT  */
+#line 298 "yacc.y"
+          {  (yyval.op) = Front::Op::LT; }
 #line 2087 "y.tab.c"
     break;
 
-  case 103: /* EqExp: EqExp NEQQ RelExp  */
-#line 286 "yacc.y"
-                        {}
+  case 100: /* RelOp: LEQQ  */
+#line 299 "yacc.y"
+           { (yyval.op) = Front::Op::LEQ; }
 #line 2093 "y.tab.c"
     break;
 
-  case 104: /* LAndExp: EqExp  */
-#line 289 "yacc.y"
-               {}
+  case 101: /* EqExp: RelExp  */
+#line 302 "yacc.y"
+              {}
 #line 2099 "y.tab.c"
     break;
 
-  case 105: /* LAndExp: LAndExp ANDD EqExp  */
-#line 290 "yacc.y"
-                         {}
+  case 102: /* EqExp: EqExp EQQ RelExp  */
+#line 303 "yacc.y"
+                       {}
 #line 2105 "y.tab.c"
     break;
 
-  case 106: /* LOrExp: LAndExp  */
-#line 293 "yacc.y"
-                {}
+  case 103: /* EqExp: EqExp NEQQ RelExp  */
+#line 304 "yacc.y"
+                        {}
 #line 2111 "y.tab.c"
     break;
 
-  case 107: /* LOrExp: LOrExp ORR LAndExp  */
-#line 294 "yacc.y"
-                         {}
+  case 104: /* LAndExp: EqExp  */
+#line 307 "yacc.y"
+               {}
 #line 2117 "y.tab.c"
     break;
 
-  case 108: /* ConstExp: AddExp  */
-#line 297 "yacc.y"
-                 {}
+  case 105: /* LAndExp: LAndExp ANDD EqExp  */
+#line 308 "yacc.y"
+                         {}
 #line 2123 "y.tab.c"
     break;
 
+  case 106: /* LOrExp: LAndExp  */
+#line 311 "yacc.y"
+                {}
+#line 2129 "y.tab.c"
+    break;
 
-#line 2127 "y.tab.c"
+  case 107: /* LOrExp: LOrExp ORR LAndExp  */
+#line 312 "yacc.y"
+                         {}
+#line 2135 "y.tab.c"
+    break;
+
+  case 108: /* ConstExp: AddExp  */
+#line 315 "yacc.y"
+                 {}
+#line 2141 "y.tab.c"
+    break;
+
+
+#line 2145 "y.tab.c"
 
       default: break;
     }
@@ -2316,7 +2334,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 299 "yacc.y"
+#line 317 "yacc.y"
 
 void yyerror(const char* s) {
     assert(false && "语法分析错误");
@@ -2330,7 +2348,6 @@ int main() {
     extern FILE* yyin;
     yyin = fp;
 	yyparse(); 
-    root->analyze();
     fclose(fp);
     return 0;
 }

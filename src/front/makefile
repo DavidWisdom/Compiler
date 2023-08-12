@@ -12,8 +12,8 @@ lex.yy.o: lex.l
 	flex lex.l
 	$(CC) $(CFLAGS) -g -c lex.yy.c
 
-syntax.o: syntax.cpp
-	$(CC) $(CFLAGS) -g -c syntax.cpp
+syntax.o: syntax.h syntax.cpp
+	$(CC) $(CFLAGS) -g -c syntax.h syntax.cpp
 
 clean:
 	rm -f *.o sysy y.tab.* lex.yy.*

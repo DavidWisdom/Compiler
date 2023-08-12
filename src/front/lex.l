@@ -1,5 +1,6 @@
 %{
 #include "y.tab.h"
+#include <cassert>
 extern "C" {
     extern int yywrap(void);
     extern int yylex(void);
@@ -31,7 +32,7 @@ Float    \d+(\.\d+)?([eE][+-]?\d+)?
 "]"        return RBRACKET;
 "{"        return LBRACE;
 "}"        return RBRACE;
-"void"     return VOID;
+"void"     return VOIDD;
 "if"       return IF;
 "else"     return ELSE;
 "while"    return WHILE;
@@ -60,14 +61,14 @@ Float    \d+(\.\d+)?([eE][+-]?\d+)?
     return INT_CONST;
 }
 {Dec} {
-    yylval.data = yytext;
+    yylval.data = new std::string(yytext);
     return INT_CONST;
 }
 {Float} {
     return FLOAT_CONST;
 }
 {Ident} {
-    yylval.name = yytext;
+    yylval.name = new std::string(yytext);
     return IDENT;
 }
 . { assert(false && "词法分析错误"); }

@@ -54,8 +54,8 @@ Grammar
 
    36 FuncDef: BType IDENT LPAREN FuncFParams RPAREN Block
    37        | BType IDENT LPAREN RPAREN Block
-   38        | VOID IDENT LPAREN FuncFParams RPAREN Block
-   39        | VOID IDENT LPAREN RPAREN Block
+   38        | VOIDD IDENT LPAREN FuncFParams RPAREN Block
+   39        | VOIDD IDENT LPAREN RPAREN Block
 
    40 FuncFParams: FuncFParam COMMA FuncFParam
    41            | FuncFParam
@@ -175,7 +175,7 @@ Terminals, with rules where they appear
     LPAREN (270) 36 37 38 39 59 60 61 70 78 79
     RPAREN (271) 36 37 38 39 59 60 61 70 78 79
     ASSIGNN (272) 12 13 27 50
-    VOID (273) 38 39
+    VOIDD (273) 38 39
     IF (274) 59 60
     ELSE (275) 60
     WHILE (276) 61
@@ -350,7 +350,7 @@ State 0
     CONST   shift, and go to state 1
     INTT    shift, and go to state 2
     FLOATT  shift, and go to state 3
-    VOID    shift, and go to state 4
+    VOIDD   shift, and go to state 4
 
     Program    go to state 5
     CompUnit   go to state 6
@@ -387,8 +387,8 @@ State 3
 
 State 4
 
-   38 FuncDef: VOID • IDENT LPAREN FuncFParams RPAREN Block
-   39        | VOID • IDENT LPAREN RPAREN Block
+   38 FuncDef: VOIDD • IDENT LPAREN FuncFParams RPAREN Block
+   39        | VOIDD • IDENT LPAREN RPAREN Block
 
     IDENT  shift, and go to state 13
 
@@ -409,7 +409,7 @@ State 6
     CONST   shift, and go to state 1
     INTT    shift, and go to state 2
     FLOATT  shift, and go to state 3
-    VOID    shift, and go to state 4
+    VOIDD   shift, and go to state 4
 
     $default  reduce using rule 1 (Program)
 
@@ -474,8 +474,8 @@ State 12
 
 State 13
 
-   38 FuncDef: VOID IDENT • LPAREN FuncFParams RPAREN Block
-   39        | VOID IDENT • LPAREN RPAREN Block
+   38 FuncDef: VOIDD IDENT • LPAREN FuncFParams RPAREN Block
+   39        | VOIDD IDENT • LPAREN RPAREN Block
 
     LPAREN  shift, and go to state 25
 
@@ -578,8 +578,8 @@ State 24
 
 State 25
 
-   38 FuncDef: VOID IDENT LPAREN • FuncFParams RPAREN Block
-   39        | VOID IDENT LPAREN • RPAREN Block
+   38 FuncDef: VOIDD IDENT LPAREN • FuncFParams RPAREN Block
+   39        | VOIDD IDENT LPAREN • RPAREN Block
 
     INTT    shift, and go to state 2
     FLOATT  shift, and go to state 3
@@ -729,7 +729,7 @@ State 34
 
 State 35
 
-   39 FuncDef: VOID IDENT LPAREN RPAREN • Block
+   39 FuncDef: VOIDD IDENT LPAREN RPAREN • Block
 
     LBRACE  shift, and go to state 66
 
@@ -746,7 +746,7 @@ State 36
 
 State 37
 
-   38 FuncDef: VOID IDENT LPAREN FuncFParams • RPAREN Block
+   38 FuncDef: VOIDD IDENT LPAREN FuncFParams • RPAREN Block
 
     RPAREN  shift, and go to state 69
 
@@ -1097,7 +1097,7 @@ State 66
 
 State 67
 
-   39 FuncDef: VOID IDENT LPAREN RPAREN Block •
+   39 FuncDef: VOIDD IDENT LPAREN RPAREN Block •
 
     $default  reduce using rule 39 (FuncDef)
 
@@ -1116,7 +1116,7 @@ State 68
 
 State 69
 
-   38 FuncDef: VOID IDENT LPAREN FuncFParams RPAREN • Block
+   38 FuncDef: VOIDD IDENT LPAREN FuncFParams RPAREN • Block
 
     LBRACE  shift, and go to state 66
 
@@ -1588,7 +1588,7 @@ State 112
 
 State 113
 
-   38 FuncDef: VOID IDENT LPAREN FuncFParams RPAREN Block •
+   38 FuncDef: VOIDD IDENT LPAREN FuncFParams RPAREN Block •
 
     $default  reduce using rule 38 (FuncDef)
 

@@ -47,15 +47,14 @@ extern int yydebug;
 /* "%code requires" blocks.  */
 #line 1 "yacc.y"
 
-#include "syntax.h"
-#include <iostream>
-#include <string>
-#include <cassert>
-#include <cstring>
-#include <memory>
-Front::CompUnit* root = nullptr;
+    #include "syntax.h"
+    #include <iostream>
+    #include <string>
+    #include <cassert>
+    #include <cstring>
+    #include <memory>
 
-#line 59 "y.tab.h"
+#line 58 "y.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -81,7 +80,7 @@ Front::CompUnit* root = nullptr;
     LPAREN = 270,                  /* LPAREN  */
     RPAREN = 271,                  /* RPAREN  */
     ASSIGNN = 272,                 /* ASSIGNN  */
-    VOID = 273,                    /* VOID  */
+    VOIDD = 273,                   /* VOIDD  */
     IF = 274,                      /* IF  */
     ELSE = 275,                    /* ELSE  */
     WHILE = 276,                   /* WHILE  */
@@ -126,7 +125,7 @@ Front::CompUnit* root = nullptr;
 #define LPAREN 270
 #define RPAREN 271
 #define ASSIGNN 272
-#define VOID 273
+#define VOIDD 273
 #define IF 274
 #define ELSE 275
 #define WHILE 276
@@ -153,16 +152,16 @@ Front::CompUnit* root = nullptr;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 16 "yacc.y"
+#line 15 "yacc.y"
 
     Front::CompUnit* compUnit;
     Front::Stmt* stmt;
-    char* data;
-    char* name;
+    std::string* data;
+    std::string* name;
     int type;
     int op;
 
-#line 166 "y.tab.h"
+#line 165 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -11,15 +11,17 @@ namespace Front {
     using std::unordered_map;
     using std::shared_ptr;
     namespace Type {
-        static constexpr int NONE =    0b00000000;
-        static constexpr int INT =     0b00000001;
-        static constexpr int FLOAT =   0b00000010;
-        static constexpr int ARRAY =   0b00000100;
-        static constexpr int CONST =   0b00001000;
-        static constexpr int GLOBAL =  0b00010000;
-        static constexpr int BOOLEAN = 0b00100000;
-        static constexpr int REAL =    0b01000000;
-        static constexpr int FUNC =    0b10000000;
+        static constexpr int NONE =    0b000000000;
+        static constexpr int INT =     0b000000001;
+        static constexpr int FLOAT =   0b000000010;
+        static constexpr int VOID =    0b000000100;
+        static constexpr int ARRAY =   0b000001000;
+        static constexpr int CONST =   0b000010000;
+        static constexpr int GLOBAL =  0b000100000;
+        static constexpr int BOOLEAN = 0b001000000;
+        static constexpr int REAL =    0b010000000;
+        static constexpr int PARA =    0b100000000;
+        static constexpr int FUNC =   0b1000000000;
     };
     namespace Op {
         static constexpr int NONE =  0b00000000;
@@ -46,6 +48,7 @@ namespace Front {
         // 定义 Value 结构体
         string data;
         int type;
+        shared_ptr<vector<int>> params = nullptr;
         shared_ptr<vector<int>> dims = nullptr;
         Value() : data(), type(Type::NONE) {}
         Value(const string& d, int t) : data(d), type(t) {}
@@ -61,12 +64,9 @@ namespace Front {
         
     public:
         SymbolTable(shared_ptr<SymbolTable> parent = nullptr);
-        void addSymbol(const string& name, Value value);
-        Value findSymbol(const string& name);
+        void insert(const string& name, Value value);
+        Value find(const string& name);
     };
-}
-namespace Front {
-
 }
 namespace Front {
     class Stmt {
@@ -76,8 +76,10 @@ namespace Front {
             return {};
         }
         virtual void push_back(shared_ptr<Stmt> stmt) {}
-        virtual void analyze() = 0;
-        virtual void astGen() const = 0;
+        virtual void insert(shared_ptr<Stmt> stmt) {}
+        virtual void setType(int type) {}
+        virtual void analyze() {}
+        virtual void astGen() const {}
     };
     // class ListStmt: public Stmt {
     // public:
@@ -92,9 +94,12 @@ namespace Front {
         void push_back(shared_ptr<Stmt> stmt) {
             values.push_back(stmt);
         }
-        void insert(shared_ptr<VarStmt> var) {
-            next.push_back(var);
+        void insert(shared_ptr<Stmt> stmt) override {
+            next.push_back(stmt);
         } 
+        void setType(int type) {
+            this->type = type;
+        }
         string getName() override;
         void analyze() override;
         void astGen() const override;
@@ -104,7 +109,7 @@ namespace Front {
         vector<shared_ptr<Stmt>> values; // 右值
         shared_ptr<Stmt> dims = nullptr; // 数组的维度
         shared_ptr<string> const_value = nullptr; // const value
-        vector<shared_ptr<VarStmt>> next;
+        vector<shared_ptr<Stmt>> next;
     };
     class NullStmt: public Stmt {
     public:
@@ -170,7 +175,7 @@ namespace Front {
     };
     class BlockStmt: public Stmt {
     public:
-        BlockStmt() {}
+        BlockStmt() : stmts(false) {}
         BlockStmt(shared_ptr<Stmt> stmt) {
             stmts.push_back(stmt);
         }
@@ -190,9 +195,15 @@ namespace Front {
     };
     class FuncDefStmt: public Stmt {
     public:
+        FuncDefStmt(string name, int t, shared_ptr<Stmt> b): name(name), type(t), block(b) {}
         string getName() override;
         void analyze() override;
         void astGen() const override;
+    private:
+        string name;
+        int type;
+        vector<shared_ptr<Stmt>> params;
+        shared_ptr<Stmt> block;
     };
     class CompUnit: public Stmt {
     public: 
@@ -206,5 +217,4 @@ namespace Front {
         vector<shared_ptr<Stmt>> units;
     };
 }
-
 #endif

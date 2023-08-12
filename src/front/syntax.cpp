@@ -5,15 +5,15 @@ using namespace std;
 namespace Front {
     SymbolTable::SymbolTable(shared_ptr<SymbolTable> parent) : parent(parent) {}
 
-    void SymbolTable::addSymbol(const string& name, Value value) {
+    void SymbolTable::insert(const string& name, Value value) {
         symbols[name] = value;
     }
 
-    Value SymbolTable::findSymbol(const string& name) {
+    Value SymbolTable::find(const string& name) {
         if (symbols.count(name) > 0) {
             return symbols[name];
         } else if (parent != nullptr) {
-            return parent->findSymbol(name);
+            return parent->find(name);
         } else {
             // TODO:
             assert(false && "Symbol not found");
@@ -33,7 +33,7 @@ namespace Front {
     }
 
     void VarStmt::astGen() const {
-        if (isArray(type)) {
+        if (!isArray(type)) {
             cout << "Single: {";
         } else {
             cout << "Array: {";
@@ -110,6 +110,12 @@ namespace Front {
 
     void BlockStmt::astGen() const {
         // Implementation for BlockStmt's astGen()
+
+        cout << "block: { ";
+        for (const auto& stmt: stmts) {
+            if (stmt) stmt->astGen();
+        }
+        cout << " }";
     }
 
     string FuncCallStmt::getName() {
@@ -136,6 +142,17 @@ namespace Front {
 
     void FuncDefStmt::astGen() const {
         // Implementation for FuncDefStmt's astGen()
+        cout << "FuncDefStmt: { ";
+        cout << "name: " << name;
+        if (!params.empty()) {
+            cout << "params: ";
+            for (const auto& p: params) {
+                p->astGen();
+            }
+        }
+        cout << ", ";
+        block->astGen();
+        cout << " }";
     }
     void CompUnit::analyze() {
         // 在此处实现analyze函数的代码
@@ -143,5 +160,11 @@ namespace Front {
 
     void CompUnit::astGen() const {
         // 在此处实现astGen函数的代码
+        cout << "CompUnit: { ";
+        stmt->astGen();
+        for (const auto& unit: units) {
+            unit->astGen();
+        }
+        cout << " }\n";
     }
 }

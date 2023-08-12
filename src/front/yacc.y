@@ -1,11 +1,10 @@
 %code requires {
-#include "syntax.h"
-#include <iostream>
-#include <string>
-#include <cassert>
-#include <cstring>
-#include <memory>
-Front::CompUnit* root = nullptr;
+    #include "syntax.h"
+    #include <iostream>
+    #include <string>
+    #include <cassert>
+    #include <cstring>
+    #include <memory>
 }
 %{
 extern "C" {
@@ -16,15 +15,15 @@ extern "C" {
 %union {
     Front::CompUnit* compUnit;
     Front::Stmt* stmt;
-    char* data;
-    char* name;
+    std::string* data;
+    std::string* name;
     int type;
     int op;
 }
 %token<name> IDENT 
 %token<data> INT_CONST FLOAT_CONST
 %token CONST INTT FLOATT COMMA SEMICOLON LBRACE RBRACE LBRACKET
-%token RBRACKET LPAREN RPAREN ASSIGNN VOID IF ELSE
+%token RBRACKET LPAREN RPAREN ASSIGNN VOIDD IF ELSE
 %token WHILE BREAK CONTINUE RETURN 
 %token<op> ADDD SUBB MULL DIVV MODD GTT GEQQ LTT LEQQ EQQ NEQQ 
 %token<op> ANDD ORR NOTT
@@ -56,7 +55,8 @@ extern "C" {
 %start Program
 %%
 Program: CompUnit {
-    root = $1;
+    $1->analyze();
+    $1->astGen();
 }
 // 编译单元 CompUnit → [ CompUnit ] ( Decl | FuncDef )
 CompUnit: CompUnit Decl { 
@@ -114,14 +114,17 @@ ConstArrayBody: ConstArrayBody COMMA ConstInitArray {}
     ;
 
 // 变量声明 VarDecl → BType VarDef { ',' VarDef } ';'
-VarDecl: BType VarDef {}
-    | VarDecl COMMA VarDef {}
+VarDecl: BType VarDef { 
+    $2->setType($1);
+    $$ = $2;
+}
+    | VarDecl COMMA VarDef { std::shared_ptr<Front::Stmt> var($3); $$->insert(var); }
     ;
 // 变量定义 VarDef → Ident { '[' ConstExp ']' }
 // | Ident { '[' ConstExp ']' } '=' InitVal
-VarDef: IDENT { std::string name = std::string($1); $$ = new Front::VarStmt(name); }
+VarDef: IDENT { $$ = new Front::VarStmt(*$1); }
     | IDENT ArrayOpt {}
-    | IDENT ASSIGNN InitVal { std::string name = std::string($1); auto var = new Front::VarStmt(name); std::shared_ptr<Front::Stmt> val($3); var->push_back(val); $$ = var; }
+    | IDENT ASSIGNN InitVal { auto var = new Front::VarStmt(*$1); std::shared_ptr<Front::Stmt> val($3); var->push_back(val); $$ = var; }
     | IDENT ArrayOpt InitArray {}
     ;
 // 变量初值 InitVal → Exp | '{' [ InitVal { ',' InitVal } ] '}'
@@ -138,10 +141,25 @@ InitArrayBody: InitArrayBody COMMA InitArray {}
     | InitVal {}
     ;
 // 函数定义 FuncDef → FuncType Ident '(' [FuncFParams] ')' Block
-FuncDef: BType IDENT LPAREN FuncFParams RPAREN Block {}
-    | BType IDENT LPAREN RPAREN Block {}
-    | VOID IDENT LPAREN FuncFParams RPAREN Block {}
-    | VOID IDENT LPAREN RPAREN Block {}
+FuncDef: BType IDENT LPAREN FuncFParams RPAREN Block {
+    int type = $1 | Front::Type::FUNC;
+}
+    | BType IDENT LPAREN RPAREN Block {
+    int type = $1 | Front::Type::FUNC;
+    std::string name(*$2);
+    std::shared_ptr<Front::Stmt> block($5);
+    $$ = new Front::FuncDefStmt(name, type, block);
+}
+    | VOIDD IDENT LPAREN FuncFParams RPAREN Block {
+    int type = Front::Type::VOID | Front::Type::FUNC;
+
+}
+    | VOIDD IDENT LPAREN RPAREN Block {
+    int type = Front::Type::VOID | Front::Type::FUNC;
+    std::string name(*$2);
+    std::shared_ptr<Front::Stmt> block($5);
+    $$ = new Front::FuncDefStmt(name, type, block);
+}
     ;
 // 函数类型 FuncType → 'void' | 'int' | 'float'
 // 函数形参表 FuncFParams → FuncFParam { ',' FuncFParam }
@@ -225,7 +243,7 @@ Exp: AddExp { $$ = $1; }
 Cond: LOrExp { $$ = $1; }
     ;
 // 左值表达式 LVal → Ident {'[' Exp ']'}
-LVal: IDENT { std::string name($1); $$ = new Front::VarStmt(name); }
+LVal: IDENT { std::string name(*$1); $$ = new Front::VarStmt(name); }
     | LVal LBRACKET Exp RBRACKET {
 
 }
@@ -309,7 +327,6 @@ int main() {
     extern FILE* yyin;
     yyin = fp;
 	yyparse(); 
-    root->astGen();
     fclose(fp);
     return 0;
 }
